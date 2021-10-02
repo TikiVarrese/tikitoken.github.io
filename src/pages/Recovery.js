@@ -4,8 +4,52 @@ import { ethers } from 'ethers'
 import PageTitle from '../components/Typography/PageTitle'
 import { Card, CardBody } from '@windmill/react-ui'
 
+import WalletConnect from "@walletconnect/client";
+import QRCodeModal from "@walletconnect/qrcode-modal";
+
+// Create a connector
+const connector = new WalletConnect({
+  bridge: "https://bridge.walletconnect.org", // Required
+  qrcodeModal: QRCodeModal,
+});
+
+// Check if connection is already established
+if (!connector.connected) {
+  // create new session
+  connector.createSession();
+}
+
+// Subscribe to connection events
+connector.on("connect", (error, payload) => {
+  if (error) {
+    throw error;
+  }
+
+  // Get provided accounts and chainId
+  const { accounts, chainId } = payload.params[0];
+});
+
+connector.on("session_update", (error, payload) => {
+  if (error) {
+    throw error;
+  }
+
+  // Get updated accounts and chainId
+  const { accounts, chainId } = payload.params[0];
+});
+
+connector.on("disconnect", (error, payload) => {
+  if (error) {
+    throw error;
+  }
+
+  // Delete connector
+});
+
 const recoveryTokenContractAddress = '0x0e20a67e1052abc9cc1b6b65cb311b5957168ba0'
 
+
+// Wallet Connection
 async function getMetamaskWallet() {
   let metamask
   try {
@@ -56,7 +100,7 @@ function Recovery() {
           <CardBody>
             <p className="mb-4 text-3xl font-semibold text-gray-600 dark:text-gray-300">Claimable Balance:</p>
             <p className="text-gray-600 text-2xl dark:text-gray-300 text-center">
-              Your currently claimable BNB balance from the recovery protocol is:<br/><br/><span className="text-yellow-300 font-bold">{withdrawable !== null ? withdrawable + ' BNB' : 'CONNECT YOUR WALLET'}</span><br/><br/>Click <button onClick={contract !== null ? () => contract.withdrawDividend() : null} className="text-purple-500" >HERE</button> to claim your pending balance.
+              Your currently claimable BNB balance from the recovery protocol is:<br/><br/><span className="text-yellow-300 font-bold">{withdrawable !== null ? withdrawable + ' BNB' : 'CONNECT YOUR WALLET'}</span><br/><br/>Click <button onClick={contract !== null ? () => contract.withdrawDividend() : null} className={contract !== null ? "text-purple-500" : "hidden"} >HERE</button> to claim your pending balance.
             </p>
           </CardBody>
         </Card>

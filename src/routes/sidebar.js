@@ -12,6 +12,21 @@ const routes = [
     name: 'Dashboard', // name that appear in Sidebar
   },
   {
+    path: '/sweepstake',
+    icon: 'CoinsIcon',
+    name: 'Sweepstake',
+  },
+  {
+    path: '/staking',
+    icon: 'MoneyIcon',
+    name: 'Staking',
+  },
+  {
+    path: '/calculator',
+    icon: 'ChartsIcon',
+    name: 'Calculator'
+  },
+  {
     path: '/recovery',
     icon: 'CardsIcon',
     name: 'Recovery',

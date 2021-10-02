@@ -14,24 +14,24 @@ import numberWithCommas from '../utils/numberWithCommas'
 
 function Dashboard(props) {
 
-  const { tikiPrice, tikiVolume, setTikiVolume, wallet, setWallet, getWallet, highestBuyers, bnbPrice, bnbHoldings, totalPaid, holdings, paid, lastPaid, address, nextPayoutProgress, nextPayoutValue, setHoldings, setPaid, setLastPaid, setAddress, setNextPayoutProgress, setNextPayoutValue } = props
-
+  const { tikiPrice, tikiVolume, setTikiVolume, wallet, setWallet, getWallet, highestBuyers, bnbPrice, bnbHoldings, totalPaid, holdings, paid, lastPaid, address, nextPayoutProgress, nextPayoutValue, setHoldings, setPaid, setLastPaid, setAddress, setNextPayoutProgress, setNextPayoutValue, tikiEarningSupplyTotal } = props
+  console.log(props)
   const [reinvestContract, setReinvestContract] = useState(null)
   const [tikiContract, setTikiContract] = useState(null)
   const [reinvested, setReinvested] = useState(false)
   const [claimed, setClaimed] = useState(false)
-  const [reinvestAmount, setReinvestAmount] = useState((Number(bnbHoldings)-((2000000*15*1000000000)/1e18)) > 0 ? (Number(bnbHoldings)-((2000000*15*1000000000)/1e18)).toFixed(4) : '0')
+  const [reinvestAmount, setReinvestAmount] = useState((Number(bnbHoldings)-((2000000*15*tikiEarningSupplyTotal)/1e18)) > 0 ? (Number(bnbHoldings)-((2000000*15*tikiEarningSupplyTotal)/1e18)).toFixed(4) : '0')
 
   const reinvestInput = <><span>Reinvest </span><input onClick={e => e.stopPropagation()} type="text" className="w-1/3 text-black text-center" value={reinvestAmount} onChange={e => setReinvestAmount(isNaN(e.target.value) ? reinvestAmount : e.target.value)} /><span> BNB (click here to confirm)</span></>
   const payoutText = <><span className="text-yellow-300">{nextPayoutValue != 0 ? nextPayoutValue + ' BNB' : 'Processing'}</span>{Date.now()-lastPaid >= 3600000 ? ` | ${nextPayoutProgress}%` : ` | ${(60-((Date.now()-lastPaid)/60000)).toFixed(0)}m`}</>
 
-  const earningsInDollars = tikiVolume == 0 ? (holdings/1000000000)*220000 : (holdings/1000000000)*(tikiVolume*0.11)
+  const earningsInDollars = tikiVolume == 0 ? (holdings/tikiEarningSupplyTotal)*220000 : (holdings/tikiEarningSupplyTotal)*(tikiVolume*0.11)
   const earningsInBnb = earningsInDollars/bnbPrice
 
   const compoundedTikiAfterNDays = (starting, days) => {
     let accumulatedTiki = Number(starting)
     for (let i = 0; i < days; i++) {
-      accumulatedTiki = tikiVolume == 0 ? accumulatedTiki + (((accumulatedTiki/1000000000)*220000)/tikiPrice) : accumulatedTiki + (((accumulatedTiki/1000000000)*(tikiVolume*0.11))/tikiPrice)
+      accumulatedTiki = tikiVolume == 0 ? accumulatedTiki + (((accumulatedTiki/tikiEarningSupplyTotal)*220000)/tikiPrice) : accumulatedTiki + (((accumulatedTiki/tikiEarningSupplyTotal)*(tikiVolume*0.11))/tikiPrice)
     }
     return accumulatedTiki.toFixed(0)
   }
@@ -126,7 +126,7 @@ function Dashboard(props) {
                 }
               }}>{nextPayoutValue == 0 ? 'Payout Is Processing' : wallet !== null ? claimed ? 'Payout Claimed!' : 'Claim Payout' : 'Optional - Connect Wallet and Claim Manually NOW'}</Button>
           
-          {/* <Button disabled={(tikiPrice === null) || (holdings == 0) || reinvested} className="ml-4 w-1/2 h-full text-lg font-bold" style={{backgroundColor: '#239470', boxShadow: '0px 0px 20px #057a55'}} onClick={
+          {/*<Button disabled={(tikiPrice === null) || (holdings == 0) || reinvested} className="ml-4 w-1/2 h-full text-lg font-bold" style={{backgroundColor: '#239470', boxShadow: '0px 0px 20px #057a55'}} onClick={
             () => {
               if (wallet !== null && reinvestContract !== null) {
                 if (tikiPrice == 0) return
@@ -162,7 +162,7 @@ function Dashboard(props) {
               <span className="w-full" style={{textShadow: '1px 1px 1px black'}}>
                   {holdings == 0 ? "You Do Not Own Enough TIKI To Reinvest" : wallet !== null ? reinvested ? `Reinvested ${reinvestAmount} BNB at Only 5% Buy Tax!` : reinvestInput : "Connect and Reinvest With ONLY 5% Buy Tax!"}
               </span>
-          </Button> */}
+          </Button>*/}
           
           </CardBody>
         </Card>

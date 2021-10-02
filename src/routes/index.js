@@ -4,6 +4,9 @@ import { lazy } from 'react'
 const Dashboard = lazy(() => import('../pages/Dashboard'))
 const Recovery = lazy(() => import('../pages/Recovery'))
 const DailyTasks = lazy(() => import('../pages/DailyTasks'))
+const Staking = lazy(() => import('../pages/Staking'))
+const Sweepstake = lazy(() => import('../pages/Sweepstake'))
+const Calculate =lazy(() => import('../pages/Calculator'))
 const Tuesday = lazy(() => import('../pages/Tuesday'))
 
 /**
@@ -24,6 +27,18 @@ const routes = [
   {
     path: '/recovery',
     component: Recovery,
+  },
+  {
+    path: '/sweepstake',
+    component: Sweepstake,
+  },
+  {
+    path: '/staking',
+    component: Staking,
+  },
+  {
+    path: '/calculator',
+    component: Calculate,
   },
   {
     path: '/tasks',
