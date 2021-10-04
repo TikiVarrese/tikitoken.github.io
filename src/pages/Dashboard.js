@@ -15,7 +15,6 @@ import numberWithCommas from '../utils/numberWithCommas'
 function Dashboard(props) {
 
   const { tikiPrice, tikiVolume, setTikiVolume, wallet, setWallet, getWallet, highestBuyers, bnbPrice, bnbHoldings, totalPaid, holdings, paid, lastPaid, address, nextPayoutProgress, nextPayoutValue, setHoldings, setPaid, setLastPaid, setAddress, setNextPayoutProgress, setNextPayoutValue, tikiEarningSupplyTotal } = props
-  console.log(props)
   const [reinvestContract, setReinvestContract] = useState(null)
   const [tikiContract, setTikiContract] = useState(null)
   const [reinvested, setReinvested] = useState(false)
@@ -43,7 +42,7 @@ function Dashboard(props) {
 
       <CTA holdings={holdings} text={(address !== "" && ethers.utils.isAddress(address) && bnbHoldings !== 0) ? `${address} | BNB In Your Wallet: ${bnbHoldings} ($${numberWithCommas((bnbHoldings*bnbPrice).toFixed(2))})` : address} />
 
-      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+      <div className={`grid gap-6 md:grid-cols-2 xl:grid-cols-4 ${wallet == null ? "hidden" : ""}`}>
         <InfoCard title="Your TIKI Holdings" value={`${numberWithCommas(holdings)} TIKI`}>
           <RoundIcon
             icon={CoinsIcon}
@@ -95,7 +94,7 @@ function Dashboard(props) {
         </Card>
 
       </div>
-        <Card className="mt-4">
+        <Card className={`mt-4 ${wallet == null ? "hidden" : ""}`}>
           <CardBody className="flex items-center">
             <Button disabled={nextPayoutValue == 0 ? true : false} className={`w-full h-full text-lg font-semibold`}
                 onClick={() => {
@@ -169,7 +168,7 @@ function Dashboard(props) {
         
       
 
-      <div className="grid grid-cols-2 gap-4 mt-4">
+      <div className={`grid grid-cols-2 gap-4 mt-4 ${wallet == null ? "hidden" : ""}`}>
 
         <Card className="col-span-2">
           <CardBody className="flex flex-col text-center items-center">

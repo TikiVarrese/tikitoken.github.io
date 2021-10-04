@@ -1,67 +1,80 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PageTitle from '../components/Typography/PageTitle'
 import InfoCard from '../components/Cards/InfoCard'
 import RoundIcon from '../components/RoundIcon'
-import { CartIcon, MoneyIcon, PeopleIcon, HeartIcon, CoinsIcon } from '../icons'
+import { CartIcon, ChartsIcon, MoneyIcon, PeopleIcon, HeartIcon, CoinsIcon } from '../icons'
 import { Card, CardBody, Button } from '@windmill/react-ui'
+import numberWithCommas from '../utils/numberWithCommas'
 
 
-function Calculator() {
+function Calculator(props) {
+  const [tikiPrice, setTikiPrice] = useState(0)
+  const [tikiVolume, setTikiVolume] = useState(0)
+  const [tikiHoldings, setTikiHoldings] = useState(0)
+  const [customHoldings, setCustomHoldings] = useState(0)
+  const [customVolume, setCustomVolume] = useState(0)
+  const [test, setTest] = useState(false)
+
+  console.log(props)
+
+  useEffect(() => {
+    setTikiHoldings(numberWithCommas(props.holdings))
+    setTikiPrice(props.tikiPrice.toFixed(4))
+    setTikiVolume(numberWithCommas(props.tikiVolume.toFixed(2)))
+  })
+
   return (
     <>
       <PageTitle>Calculator</PageTitle>
 
-      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-        <InfoCard title="Your TIKI Holdings" value={`0 TIKI`}>
-          <RoundIcon
-            icon={CoinsIcon}
-            iconColorClass="text-orange-500 dark:text-orange-100"
-            bgColorClass="bg-orange-100 dark:bg-orange-500"
-            className="mr-4"
-          />
-        </InfoCard>
+      <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-3">
+        <Card >
+          <CardBody className="flex items-center">
+            <RoundIcon
+              icon={CoinsIcon}
+              iconColorClass="text-orange-500 dark:text-orange-100"
+              bgColorClass="bg-orange-100 dark:bg-orange-500"
+              className="mr-4"
+            />
+            <div>
+              <p className="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">TIKI Holdings</p>
+              
+              <p className="text-lg font-semibold text-gray-700 dark:text-gray-200">{tikiHoldings} TIKI</p>
+            </div>
+          </CardBody>
+        </Card>
         
         <Card>
           <CardBody className="flex items-center">
             <RoundIcon
-              icon={PeopleIcon}
+              icon={ChartsIcon}
               iconColorClass="text-green-500 dark:text-green-100"
               bgColorClass="bg-green-100 dark:bg-green-500"
               className="mr-4"
             />
             <div>
-              <p className="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">Total BNB Paid</p>
+              <p className="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">Volume</p>
               
-              <p className="text-lg font-semibold text-gray-700 dark:text-gray-200"><span className="text-yellow-300">0</span><span className="italic font-light text-md text-green-400">0</span></p>
+              <p className="text-lg font-semibold text-gray-700 dark:text-gray-200">${tikiVolume} USD</p>
             </div>
           </CardBody>
         </Card>
 
-        <InfoCard className="" title="Last Payout Time" value={`0`}>
+        <Card>
+          <CardBody className="flex items-center">
             <RoundIcon
-              icon={MoneyIcon}
+              icon={PeopleIcon}
               iconColorClass="text-blue-500 dark:text-blue-100"
               bgColorClass="bg-blue-100 dark:bg-blue-500"
               className="mr-4"
             />
-        </InfoCard>
-        
-        <Card>
-          <CardBody className="flex items-center">
-            <RoundIcon
-              icon={CartIcon}
-              iconColorClass="text-yellow-500 dark:text-yellow-100"
-              bgColorClass="bg-yellow-100 dark:bg-yellow-500"
-              className="mr-4"
-            />
             <div>
-              <p className="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">Payout Loading</p>
+              <p className="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">Price</p>
               
-              <p className="text-lg font-semibold text-gray-700 dark:text-gray-200">0</p>
+              <p className="text-lg font-semibold text-gray-700 dark:text-gray-200">${tikiPrice} USD</p>
             </div>
           </CardBody>
         </Card>
-
       </div>
     </>
   )

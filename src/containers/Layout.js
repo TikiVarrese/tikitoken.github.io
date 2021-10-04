@@ -27,9 +27,8 @@ function Layout(props) {
       className={`flex h-screen bg-gray-50 dark:bg-gray-900 ${isSidebarOpen && 'overflow-hidden'}`}
     >
       <Sidebar />
-
       <div className="flex flex-col flex-1 w-full h-full">
-        <Header address={address} setAddress={setAddress} />
+        <Header address={address} setAddress={setAddress} setIsModalOpen={props.setIsModalOpen} wallet={wallet} getWallet={getWallet} setWallet={setWallet} />
         <Main>
           {((totalPaid !== 0 && address === '') || (address !== '' && nextPayoutProgress !== 0)) ? <Suspense fallback={<ThemedSuspense />}>
             <Switch>
@@ -45,7 +44,7 @@ function Layout(props) {
               })}
             </Switch>
           </Suspense> : 
-          <div className="w-full h-full flex justify-center items-center">
+          <div className="w-full h-full flex-col flex justify-center items-center animate-spin transition-all">
             <img src='https://uploads-ssl.webflow.com/60c7783699e1051d74062f79/60c9ca23cfdaec309091e4b0_Logo---Animation--05.gif' className="w-1/4 h-1/3 inline-block align-middle"/>
           </div>}
         </Main>
